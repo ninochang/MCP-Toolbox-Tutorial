@@ -1,0 +1,30 @@
+sources:
+  swag-api:
+    kind: http
+    baseUrl: http://${SWAG_API_HOST}:8000
+    timeout: 10s # default to 30s
+
+tools:
+    debug:
+        kind: http
+        source: swag-api
+        method: GET
+        path: /debug
+        description: Tool to send debug requests to the API
+
+    # get_user_info:
+    #     kind: http
+    #     source: swag-api
+    #     method: GET
+    #     path: /user/{user_id}
+    #     description: Tool to get user information
+    #     queryParams:
+    #       - name: user_id
+    #         description: user id to get information for
+    #         type: string
+
+toolsets:
+  basic:
+    - debug
+    # - get_user_info
+    

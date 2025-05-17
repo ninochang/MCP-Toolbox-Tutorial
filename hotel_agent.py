@@ -11,7 +11,12 @@ import os
 
 os.environ['GOOGLE_API_KEY'] = 'YOUR_GOOGLE_API_KEY'
 
-toolbox_tools = ToolboxTool("http://localhost:8080")
+db_tools = ToolboxTool("http://localhost:8080")
+swag_api_tools = ToolboxTool("http://localhost:8081")
+tools = [
+  *db_tools.get_toolset("my-toolset"),
+  *swag_api_tools.get_toolset("basic"),
+]
 
 prompt = """
   You're a helpful hotel assistant. You handle hotel searching, booking and
@@ -29,7 +34,7 @@ root_agent = Agent(
     name='hotel_agent',
     description='A helpful AI assistant.',
     instruction=prompt,
-    tools=toolbox_tools.get_toolset("my-toolset"),
+    tools=tools,
 )
 
 session_service = InMemorySessionService()
@@ -45,10 +50,11 @@ runner = Runner(
 )
 
 queries = [
-    "Find hotels in Basel with Basel in it's name.",
-    "Can you book the Hilton Basel for me?",
-    "Oh wait, this is too expensive. Please cancel it and book the Hyatt Regency instead.",
-    "My check in dates would be from April 10, 2024 to April 19, 2024.",
+    # "Find hotels in Basel with Basel in it's name.",
+    # "Can you book the Hilton Basel for me?",
+    # "Oh wait, this is too expensive. Please cancel it and book the Hyatt Regency instead.",
+    # "My check in dates would be from April 10, 2024 to April 19, 2024.",
+    "I'd like to "
 ]
 
 for query in queries:

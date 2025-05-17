@@ -16,6 +16,19 @@ services:
         condition: service_healthy
     networks:
       - tool-network
+  toolbox-http:
+    # TODO: It is recommended to pin to a specific image version instead of latest.
+    image:  us-central1-docker.pkg.dev/database-toolbox/toolbox/toolbox:latest
+    hostname: toolbox-http
+    environment:
+      SWAG_API_HOST: host.docker.internal 
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./config/toolbox-http:/config
+    command: [ "toolbox", "--tools-file", "/config/tools.yaml", "--address", "0.0.0.0", "--port", "8081"]
+    networks:
+      - tool-network
   db:
     # TODO: It is recommended to pin to a specific image version instead of latest.
     image: postgres

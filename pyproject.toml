@@ -1,0 +1,12 @@
+[project]
+name = "mcp-toolbox-tutorial"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "google-adk>=0.5.0",
+    "ipython>=9.2.0",
+    "langchain>=0.3.25",
+    "toolbox-langchain>=0.1.0",
+]

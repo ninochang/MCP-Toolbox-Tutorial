@@ -6,6 +6,10 @@ sources:
     database: toolbox_db
     user: ${USER_NAME}
     password: ${PASSWORD}
+  swag-api:
+    kind: http
+    baseUrl: http://${SWAG_API_HOST}:8000
+    timeout: 10s # default to 30s
 tools:
   search-hotels-by-name:
     kind: postgres-sql
@@ -29,12 +33,13 @@ tools:
     kind: postgres-sql
     source: my-pg-source
     description: >-
-       Book a hotel by its ID. If the hotel is successfully booked, returns a NULL, raises an error if not.
+       Book a hotel by its ID. If returned hotel booked is 1, then the hotel is successfully booked, otherwise it is not.
     parameters:
       - name: hotel_id
         type: string
         description: The ID of the hotel to book.
-    statement: UPDATE hotels SET booked = B'1' WHERE id = $1;
+    statement: >- 
+      UPDATE hotels SET booked = B'1' WHERE id = $1 RETURNING id, booked;
   update-hotel:
     kind: postgres-sql
     source: my-pg-source
@@ -62,7 +67,13 @@ tools:
       - name: hotel_id
         type: string
         description: The ID of the hotel to cancel.
-    statement: UPDATE hotels SET booked = B'0' WHERE id = $1;
+    statement: UPDATE hotels SET booked = B'0' WHERE id = $1 RETURNING id, booked;
+  debug-swag-api:
+    kind: http
+    source: swag-api
+    method: GET
+    path: /debug
+    description: Tool to send debug requests to the API
 toolsets:
   my-toolset:
     - search-hotels-by-name
@@ -70,3 +81,5 @@ toolsets:
     - book-hotel
     - update-hotel
     - cancel-hotel
+  swag-api:
+    - debug-swag-api
